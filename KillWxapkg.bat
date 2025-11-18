@@ -1,18 +1,6 @@
 @echo off
 chcp 65001 >nul
-set "FILE=KillWxapkg_2.4.1_windows_386.exe"
-set "URL=https://github.com/Ackites/KillWxapkg/releases"
 
-REM 判断 exe 是否存在
-if not exist "%~dp0%FILE%" (
-    echo 未找到：%FILE%
-    echo.
-    echo 正在打开下载页面...
-    start "" "%URL%"
-    echo.
-    pause
-    goto :eof
-)
 set "EXT=.wxapkg"
 
 REM 检查是否有参数
@@ -23,7 +11,7 @@ if "%~1"=="" (
 )
 
 if "%~2"=="" (
- echo step2 请拖入一个或多个文件或文件夹到此bat执行
+ echo step2 
 
 
  goto step2
@@ -60,9 +48,24 @@ if "%AppID%"=="" (
 REM 输出文件 = 原文件路径 + "_"
 set outputFile=%inputFile%_
 
-REM 当前bat所在目录exe
-set exePath=%~dp0KillWxapkg_2.4.1_windows_386.exe
 
+REM 尝试查找 KillWxapkg*.exe
+for %%f in ("%~dp0KillWxapkg*.exe") do (
+    set "exePath=%%f"
+    goto :found1
+)
+
+REM 如果没找到就执行这里
+echo KillWxapkg不存在，打开下载网页...
+start "" "https://github.com/Ackites/KillWxapkg/releases"
+pause
+exit
+
+:found1
+
+REM 往下执行其他逻辑
+REM 例如：
+REM start "" "!exePath!"
 REM 打印执行命令
 
 echo %exePath% -id=%AppID% -in=%inputFile% -out=%outputFile%

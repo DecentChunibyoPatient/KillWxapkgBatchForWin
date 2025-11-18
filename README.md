@@ -1,0 +1,2 @@
+# KillWxapkgBatchForWin
+批量操作KillWxapkg
